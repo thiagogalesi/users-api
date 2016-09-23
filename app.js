@@ -7,6 +7,7 @@ var marked = require('marked');
 var fs = require('fs');
 var logger = require('winston');
 var userController = require('./controllers/users');
+var body_parser = require('body-parser');
 
 var app = express();
 
@@ -14,6 +15,7 @@ var app = express();
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(morgan('dev'));
+app.use(body_parser.json());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 

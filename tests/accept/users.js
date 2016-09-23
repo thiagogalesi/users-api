@@ -40,6 +40,55 @@ describe('Users', function() {
     });
   });
 
+  describe('/PUT users/', function() {
+      it('should update a single user',
+      function(done) {
+          var nobj = {
+              'first': 'New',
+              'last': 'User'
+          };
+          var new_user = User({'name': nobj, 'username': 'newuser'});
+          new_user.save(function(err, o, n) {
+              logger.info('PUT user saved');
+              chai.request(url)
+                  .put('/users/' + o._id).send({'username': 'newuser2'})
+                  .end(function(err, res) {
+                      logger.info('PUT /PUT called on ' + o._id);
+                      res.should.have.status(200);
+                      var resd = JSON.parse(res.text);
+                      logger.info(res.text);
+                      User.findOne({
+                          '_id': resd.id
+                      }, function(err, user) {
+                          var id = user._id;
+                          expect(id).ok;
+                          done();
+                      });
+                  });
+
+          });
+      });
+  });
+
+  describe('/POST users/', function() {
+    it('should create a single user', function(done) {
+      var nobj = {'first': 'New', 'last': 'User'};
+      chai.request(url)
+			  .post('/users')
+				.send(nobj)
+				.end(function(err, res) {
+          res.should.have.status(200);
+					var resd = JSON.parse(res.text);
+					logger.info(res.text);
+					User.findOne({'_id': resd.id}, function(err, user) {
+						var id = user._id;
+						expect(id).ok;
+						done();
+					});
+				});
+		});
+	});
+
   describe('/GET users/:id', function() {
     it('should return a single user', function(done) {
       // Find a user in the DB
