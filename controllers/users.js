@@ -19,20 +19,20 @@ router.get('/', function(req, res) {
 });
 
 router.put('/:id', function(req, res) {
-    logger.info("Put called");
-    logger.info(req.body);
-    User.findOneAndUpdate({
-            _id: req.params.id
-        }, req.body, {},
-        function(err, o) {
-            logger.info('put cb');
-            if (err) {
-                return res.status(500).json({
-                    error: "Error updating user: " + err
-                });
-            }
-            return res.json({'id': o._id});
-        });
+  logger.info("Put called");
+  logger.info(req.body);
+  User.findOneAndUpdate({
+      _id: req.params.id
+    }, req.body, {},
+    function(err, o) {
+      logger.info('put cb');
+      if (err) {
+          return res.status(500).json({
+              error: "Error updating user: " + err
+          });
+      }
+      return res.json({'id': o._id});
+    });
 });
 
 router.post('/', function(req, res) {
